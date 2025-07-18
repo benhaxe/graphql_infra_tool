@@ -1,7 +1,10 @@
 name: graphql_infra_tool
-description: A starting point for Dart libraries or applications.
+description: A comprehensive Flutter package providing a robust wrapper around GraphQL operations with built-in error handling, authentication, caching, and logging capabilities.
 version: 1.0.0
-# repository: https://github.com/my_org/my_repo
+homepage: https://github.com/your-username/graphql_infra_tool
+repository: https://github.com/your-username/graphql_infra_tool
+issue_tracker: https://github.com/your-username/graphql_infra_tool/issues
+documentation: https://pub.dev/packages/graphql_infra_tool
 
 environment:
   sdk: ^3.7.2
