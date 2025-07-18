@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:graphql_infra_tool/graphql_infra_tool.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
+import 'package:graphql_infra_tool/result/src/gql_result_wrapper_impl.dart';
 
 import 'mocks.dart';
 
@@ -181,7 +182,7 @@ void main() {
 
   group('GQLResultWrapper', () {
     test('should wrap successful operation', () async {
-      final result = await GQLResultWrapper.wrap(() async => 'success');
+      final result = await GQLResultWrapperSample.wrap(() async => 'success');
 
       expect(result, isA<Success<String>>());
       final success = result as Success<String>;
@@ -189,7 +190,7 @@ void main() {
     });
 
     test('should wrap failing operation', () async {
-      final result = await GQLResultWrapper.wrap(() async {
+      final result = await GQLResultWrapperSample.wrap(() async {
         throw Exception('Test error');
       });
 
@@ -199,7 +200,7 @@ void main() {
     });
 
     test('should wrap GQLException', () async {
-      final result = await GQLResultWrapper.wrap(() async {
+      final result = await GQLResultWrapperSample.wrap(() async {
         throw AppError(AppErrorModel(message: 'Custom error'));
       });
 
@@ -210,7 +211,7 @@ void main() {
     });
 
     test('should use instance method', () async {
-      final wrapper = GQLResultWrapper();
+      final wrapper = GQLResultWrapperSample();
       final result = await wrapper.call(() async => 'instance success');
 
       expect(result, isA<Success<String>>());

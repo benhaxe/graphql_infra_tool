@@ -76,32 +76,42 @@ class GQLClient {
     }
   }
 
-  Future<T> mutate<T>({
-    required String mutation,
+  Future<T> execute<T>({
+    required GQLOperationType operationType,
+    required String document,
     Map<String, dynamic>? variable,
     FetchPolicy? fetchPolicy,
     required T Function(dynamic json) modelParser,
   }) async {
     try {
-      final response = await _client.mutate(
-        MutationOptions(
-          document: gql(mutation),
-          variables: variable ?? {},
-          fetchPolicy: fetchPolicy ?? _gqlConfig.mutationPolicy,
-        ),
-      );
+      late QueryResult response;
+      if (operationType == GQLOperationType.query) {
+        response = await _client.query(
+          QueryOptions(
+            document: gql(document),
+            variables: variable ?? {},
+            fetchPolicy: fetchPolicy ?? _gqlConfig.queryPolicy,
+          ),
+        );
+      } else {
+        response = await _client.mutate(
+          MutationOptions(
+            document: gql(document),
+            variables: variable ?? {},
+            fetchPolicy: fetchPolicy ?? _gqlConfig.mutationPolicy,
+          ),
+        );
+      }
 
-      // Check if there are GraphQL errors first
       if (response.hasException) {
         throw response.exception!;
       }
 
-      // Check if data is null
       if (response.data == null) {
         throw Exception('GraphQL response data is null');
       }
 
-      final resolvedData = _getResolvedData(mutation, response.data!);
+      final resolvedData = _getResolvedData(document, response.data!);
       try {
         return modelParser(resolvedData);
       } catch (e, s) {
@@ -116,60 +126,32 @@ class GQLClient {
     }
   }
 
-  Future<T> query<T>({
-    required String query,
+  Future<List<T>> executeList<T>({
+    required GQLOperationType operationType,
+    required String document,
     Map<String, dynamic>? variable,
     FetchPolicy? fetchPolicy,
     required T Function(dynamic json) modelParser,
   }) async {
     try {
-      final response = await _client.query(
-        QueryOptions(
-          document: gql(query),
-          variables: variable ?? {},
-          fetchPolicy: fetchPolicy ?? _gqlConfig.queryPolicy,
-        ),
-      );
-
-      // Check if there are GraphQL errors first
-      if (response.hasException) {
-        throw response.exception!;
+      late QueryResult response;
+      if (operationType == GQLOperationType.query) {
+        response = await _client.query(
+          QueryOptions(
+            document: gql(document),
+            variables: variable ?? {},
+            fetchPolicy: fetchPolicy ?? _gqlConfig.queryPolicy,
+          ),
+        );
+      } else {
+        response = await _client.mutate(
+          MutationOptions(
+            document: gql(document),
+            variables: variable ?? {},
+            fetchPolicy: fetchPolicy ?? _gqlConfig.mutationPolicy,
+          ),
+        );
       }
-
-      // Check if data is null
-      if (response.data == null) {
-        throw Exception('GraphQL response data is null');
-      }
-
-      final resolvedData = _getResolvedData(query, response.data!);
-      try {
-        return modelParser(resolvedData);
-      } catch (e, s) {
-        log("Model parsing error $e,\n$s");
-        rethrow;
-      }
-    } catch (exception) {
-      throw GQLException.fromException(
-        exception,
-        exceptionProviders: _gqlConfig.exceptionProviders,
-      );
-    }
-  }
-
-  Future<List<T>> queryList<T>({
-    required String query,
-    Map<String, dynamic>? variable,
-    FetchPolicy? fetchPolicy,
-    required T Function(dynamic json) modelParser,
-  }) async {
-    try {
-      final response = await _client.query(
-        QueryOptions(
-          document: gql(query),
-          variables: variable ?? {},
-          fetchPolicy: fetchPolicy ?? _gqlConfig.queryPolicy,
-        ),
-      );
 
       if (response.hasException) {
         throw response.exception!;
@@ -179,52 +161,8 @@ class GQLClient {
         return <T>[];
       }
 
-      final resolvedData = _getResolvedData(query, response.data!);
+      final resolvedData = _getResolvedData(document, response.data!);
 
-      if (resolvedData is List) {
-        try {
-          return resolvedData
-              .map((json) => modelParser(json))
-              .toList()
-              .cast<T>();
-        } catch (e, s) {
-          log("Model parsing error $e,\n$s");
-          rethrow;
-        }
-      }
-      return <T>[];
-    } catch (exception) {
-      throw GQLException.fromException(
-        exception,
-        exceptionProviders: _gqlConfig.exceptionProviders,
-      );
-    }
-  }
-
-  Future<List<T>> mutateList<T>({
-    required String mutation,
-    Map<String, dynamic>? variable,
-    FetchPolicy? fetchPolicy,
-    required T Function(dynamic json) modelParser,
-  }) async {
-    try {
-      final response = await _client.mutate(
-        MutationOptions(
-          document: gql(mutation),
-          variables: variable ?? {},
-          fetchPolicy: fetchPolicy ?? _gqlConfig.mutationPolicy,
-        ),
-      );
-
-      if (response.hasException) {
-        throw response.exception!;
-      }
-
-      if (response.data == null) {
-        return <T>[];
-      }
-
-      final resolvedData = _getResolvedData(mutation, response.data!);
       if (resolvedData is List) {
         try {
           return resolvedData

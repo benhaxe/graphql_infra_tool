@@ -2,6 +2,7 @@ import 'package:graphql_infra_tool/config/src/graphql_config.dart';
 import 'package:graphql_infra_tool/result/src/gql_result.dart';
 import 'package:graphql_infra_tool/result/src/gql_result_wrapper_impl.dart';
 import 'package:graphql_infra_tool/service/src/gql_client.dart';
+import 'package:graphql_infra_tool/service/src/operation_type_enum.dart';
 import 'package:graphql_infra_tool_example/models/user.dart';
 import 'package:graphql_infra_tool_example/providers/auth_provider.dart';
 import 'package:graphql_infra_tool_example/providers/exception_provider.dart';
@@ -31,9 +32,10 @@ class GraphQLService {
 
   // Queries
   Future<GQLResult<User>> getUser(String userId) async {
-    return GQLResultWrapper.wrap(
-      () => _client.query<User>(
-        query: '''
+    return GQLResultWrapperSample.wrap(
+      () => _client.execute<User>(
+        operationType: GQLOperationType.query,
+        document: '''
           query GetUser(\$id: String!) {
             user(id: \$id) {
               id
@@ -50,9 +52,10 @@ class GraphQLService {
   }
 
   Future<GQLResult<List<User>>> getUsers() async {
-    return GQLResultWrapper.wrap(
-      () => _client.queryList<User>(
-        query: '''
+    return GQLResultWrapperSample.wrap(
+      () => _client.executeList<User>(
+        operationType: GQLOperationType.query,
+        document: '''
           query GetUsers {
             users {
               id
@@ -69,9 +72,10 @@ class GraphQLService {
 
   // Mutations
   Future<GQLResult<User>> createUser(CreateUserInput input) async {
-    return GQLResultWrapper.wrap(
-      () => _client.mutate<User>(
-        mutation: '''
+    return GQLResultWrapperSample.wrap(
+      () => _client.execute<User>(
+        operationType: GQLOperationType.mutation,
+        document: '''
           mutation CreateUser(\$input: CreateUserInput!) {
             createUser(input: \$input) {
               id
@@ -91,9 +95,10 @@ class GraphQLService {
     String userId,
     CreateUserInput input,
   ) async {
-    return GQLResultWrapper.wrap(
-      () => _client.mutate<User>(
-        mutation: '''
+    return GQLResultWrapperSample.wrap(
+      () => _client.execute<User>(
+        operationType: GQLOperationType.mutation,
+        document: '''
           mutation UpdateUser(\$id: String!, \$input: UpdateUserInput!) {
             updateUser(id: \$id, input: \$input) {
               id
@@ -110,9 +115,10 @@ class GraphQLService {
   }
 
   Future<GQLResult<bool>> deleteUser(String userId) async {
-    return GQLResultWrapper.wrap(
-      () => _client.mutate<bool>(
-        mutation: '''
+    return GQLResultWrapperSample.wrap(
+      () => _client.execute<bool>(
+        operationType: GQLOperationType.mutation,
+        document: '''
           mutation DeleteUser(\$id: String!) {
             deleteUser(id: \$id)
           }

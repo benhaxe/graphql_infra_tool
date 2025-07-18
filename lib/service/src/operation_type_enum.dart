@@ -1,0 +1,1 @@
+enum GQLOperationType { query, mutation }
