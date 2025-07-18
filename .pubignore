@@ -1,0 +1,9 @@
+# Exclude Flutter plugin files
+.flutter-plugins
+.flutter-plugins-dependencies
+
+# Exclude build and IDE files
+build/
+.idea/
+.vscode/
+.DS_Store
