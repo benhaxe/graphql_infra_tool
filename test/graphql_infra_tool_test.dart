@@ -2,7 +2,6 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:graphql_infra_tool/graphql_infra_tool.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 import 'package:graphql_infra_tool/result/src/gql_result_wrapper_impl.dart';
-
 import 'mocks.dart';
 
 void main() {

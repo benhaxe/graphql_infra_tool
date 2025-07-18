@@ -4,10 +4,11 @@ import 'package:graphql_infra_tool/exceptions/src/gql_exceptions.dart';
 import 'package:graphql_infra_tool/result/src/gql_result.dart';
 import 'package:graphql_infra_tool/result/src/gql_result_wrapper.dart';
 
-class GQLResultWrapper implements GQLResultWrapperInterface {
-  static final GQLResultWrapper _instance = GQLResultWrapper._internal();
-  GQLResultWrapper._internal();
-  factory GQLResultWrapper() => _instance;
+class GQLResultWrapperSample implements GQLResultWrapperInterface {
+  static final GQLResultWrapperSample _instance =
+      GQLResultWrapperSample._internal();
+  GQLResultWrapperSample._internal();
+  factory GQLResultWrapperSample() => _instance;
 
   /// Static method for backward compatibility and easy usage
   static Future<GQLResult<T>> wrap<T>(Future<T> Function() func) async {
