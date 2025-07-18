@@ -19,7 +19,7 @@ Add this to your package's `pubspec.yaml` file:
 
 ```yaml
 dependencies:
-  graphql_infra_tool: ^1.0.0
+  graphql_infra_tool: ^1.0.1
 ```
 
 Then run:
