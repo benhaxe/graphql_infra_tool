@@ -3,7 +3,6 @@ import 'package:graphql_infra_tool/graphql_infra_tool.dart';
 import 'package:graphql_flutter/graphql_flutter.dart';
 
 import 'mocks.dart';
-import '../lib/result/src/gql_result_wrapper_impl.dart';
 
 void main() {
   group('GQLConfig', () {
