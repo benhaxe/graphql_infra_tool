@@ -43,7 +43,7 @@ sealed class GQLException implements Exception {
         return const UnExpectedError();
       }
     } else {
-      if (exception.toString().contains('Is not a subtype of')) {
+      if (exception is String && exception.contains('is not a subtype of')) {
         return const UnableToProcessError();
       } else {
         return const UnExpectedError();

@@ -456,4 +456,4 @@ If you encounter any issues or have questions, please:
 
 ## Changelog
 
-See [CHANGELOG.md](CHANGELOG.md) for a detailed list of changes and updates.
+See [CHANGELOG.md](CHANGELOG.md) for a detailed list of changes and updates.ter
